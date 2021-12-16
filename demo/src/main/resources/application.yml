@@ -1,3 +1,64 @@
 server:
   port: 8081
 
+spring:
+  application:
+    name: @artifactId@
+  #动态数据源配置
+  #组名则切换时采用负载均衡算法切换 || 配置文件所有以下划线 _ 分割的数据源 首部 即为组的名称，相同组名称的数据源会放在一个组下
+  #方法上的注解优先于类上注解
+  datasource:
+    dynamic:
+      primary: master_1
+      strict: false
+      datasource:
+        master_1:
+          url: jdbc:mysql://192.168.88.134:3306/test?useSSL=true&useUnicode=yes&characterEncoding=UTF8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=CONVERT_TO_NULL
+          username: ENC(5bUNFkRgOqwg/l2AYmAQEQ==)
+          password: ENC(EqfL1zWESggk2STZIqr1Sg==)
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        master_2:
+          url: jdbc:mysql://192.168.88.134:3307/test?useSSL=true&useUnicode=yes&characterEncoding=UTF8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=CONVERT_TO_NULL
+          username: ENC(5bUNFkRgOqwg/l2AYmAQEQ==)
+          password: ENC(EqfL1zWESggk2STZIqr1Sg==)
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        slave_1:
+          url: jdbc:mysql://192.168.88.134:3308/test?useSSL=true&useUnicode=yes&characterEncoding=UTF8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=CONVERT_TO_NULL
+          username: ENC(5bUNFkRgOqwg/l2AYmAQEQ==)
+          password: ENC(EqfL1zWESggk2STZIqr1Sg==)
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        slave_2:
+          url: jdbc:mysql://192.168.88.134:3309/test?useSSL=true&useUnicode=yes&characterEncoding=UTF8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=CONVERT_TO_NULL
+          username: ENC(5bUNFkRgOqwg/l2AYmAQEQ==)
+          password: ENC(EqfL1zWESggk2STZIqr1Sg==)
+          driver-class-name: com.mysql.cj.jdbc.Driver
+
+#mybatis-plus配置
+mybatis-plus:
+  mapper-locations: classpath:mybatis/*/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    auto-mapping-behavior: full
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      #逻辑删除配置
+      #删除 -->更新
+      #添加 -->不做任何操作
+      #更新 --> 会通过where delete_flag=0过滤
+      #查询 -->和更新一样
+      logic-delete-field: deleteFlag
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      id-type: auto
+
+
+
+#jasypt秘钥
+#3.0.0版本后，必须配置加密算法，否则报错
+jasypt:
+  encryptor:
+    password: adjkfjen12?@123
+    algorithm: PBEWithMD5AndDES
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator
+
